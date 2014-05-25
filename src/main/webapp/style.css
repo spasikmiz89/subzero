@@ -1,0 +1,18 @@
+.message-table {
+    display: block;
+    margin-right: 10%;
+    margin-left: 10%;
+}
+
+.icon {
+    width: 50px;
+    height: 60px;
+}
+.add-block-line{
+    display: inline-block;
+}
+
+.add-block{
+    width: 400px;
+    height: 300px;
+}

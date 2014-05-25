@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:c="http://java.sun.com/jsp/jstl/core">
+<h:head>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+        <link type="text/css" rel="stylesheet"
+              href="style.css"/>
+    </head>
+    <title>Андрюшки</title>
+</h:head>
+<h:body>
+    <script type="text/javascript">
+        function check (){
+            return !(document.getElementById("andreyForm:phrase").value=="" || andrey.value=="");
+        }
+    </script>
+    <h:outputLink value="#{request.contextPath}/j_spring_security_logout">Выйти</h:outputLink>
+
+
+    <p:outputPanel styleClass="message-table">
+        <h:form id="andreyForm">
+            <p:commandButton
+                    id="add" value="добавить" type="button"/>
+            <p:overlayPanel  for="add" hideEffect="fade" dynamic="true" styleClass="add-block">
+                <h:panelGrid columns="2" style="margin-bottom:10px" cellpadding="5">
+                    <h:outputLabel value="Фраза" style="width: 100px"/>
+                    <h:inputTextarea id="phrase" value="#{Messages.message}"/>
+
+                    <h:outputLabel value="Андрюшка" style="width: 100px"/>
+                    <p:selectOneMenu widgetVar="andrey" value="#{Messages.userId}">
+                        <f:selectItem itemLabel="Выбери андрюшку" itemValue="" />
+                        <f:selectItem itemLabel="Марго" itemValue="1" />
+                        <f:selectItem itemLabel="Алешка" itemValue="2" />
+                        <f:selectItem itemLabel="Лексус" itemValue="3" />
+                    </p:selectOneMenu>
+                </h:panelGrid>
+
+                <h:commandButton onclick="return check();" action="#{Messages.addMessage}" value="добавить" />
+            </p:overlayPanel>
+        </h:form>
+
+            <p:dataTable paginator="true" value="#{Messages.messages}" var="m">
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="кто это"/>
+                    </f:facet>
+                    <p:outputPanel>
+                        <h:graphicImage value="/images/#{m.user.id}.jpg" styleClass="icon"/>
+                    </p:outputPanel>
+                </p:column>
+
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="Рейтинг"/>
+                    </f:facet>
+                    <p:outputPanel>
+                        #{m.priority}
+                    </p:outputPanel>
+                </p:column>
+
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="Фраза"/>
+                    </f:facet>
+                    <h:outputText value="#{m.message}"/>
+                </p:column>
+
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="сам Андрюшка"/>
+                    </f:facet>
+                    <h:outputText value="#{m.user.fio}"/>
+                </p:column>
+
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="когда добавили"/>
+                    </f:facet>
+                    <p:outputPanel>
+                        #{m.date}
+                    </p:outputPanel>
+                </p:column>
+
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="действие"/>
+                    </f:facet>
+                    <p:outputPanel>
+                        <h:form>
+                            <h:commandButton action="#{Messages.vote(m.id)}" value="голосовать"/>
+                        </h:form>
+                        <h:form>
+                            <h:commandButton onclick="if (! confirm('фраза не очень, удалить?')) return false" action="#{Messages.delete(m.id)}" value="удалить"/>
+                        </h:form>
+                    </p:outputPanel>
+                </p:column>
+            </p:dataTable>
+
+    </p:outputPanel>
+
+
+
+</h:body>
+</html>
